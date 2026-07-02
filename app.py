@@ -1,11 +1,8 @@
-
 import streamlit as st
-import google.generativeai as genai
+from google import genai
 
-# Configure Gemini API
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-
-model = genai.GenerativeModel("gemini-2.5-flash")
+# Configure the modern Gemini Client using your existing secret
+client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 st.set_page_config(page_title="AI Learning Buddy Manasvi", page_icon="🎓")
 
@@ -40,7 +37,9 @@ if st.button("Generate"):
 
         else:
             prompt = topic
-
-        response = model.generate_content(prompt)
-
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=prompt,
+        )
         st.write(response.text)
+        
